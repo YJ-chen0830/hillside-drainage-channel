@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⛰️ 山坡地排水溝設計 | Hillside Drainage Channel Design</title>
+<script src="https://yj-chen0830.github.io/jrh-core/jrh-core.js?v=3" defer></script>
+<style>
+  :root{
+    --pine:#17352d;
+    --pine2:#244b3f;
+    --moss:#6c8a45;
+    --sand:#d8bc82;
+    --sand2:#ecd6a7;
+    --mist:#f2efe7;
+    --card:#fffdf8;
+    --ink:#20302a;
+    --line:#d6d0bf;
+    --ok:#1d7b3c;
+    --ng:#b23b2d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Noto Sans TC","Segoe UI",sans-serif;background:linear-gradient(180deg,#f7f4ec 0%,#eeefe6 100%);color:var(--ink);}
+  header{background:linear-gradient(135deg,var(--pine),var(--pine2));color:#f8f6ef;padding:28px 32px 32px;position:relative;overflow:hidden;}
+  header::after{content:"";position:absolute;inset:auto -40px -80px auto;width:240px;height:240px;background:radial-gradient(circle,var(--sand) 0%,rgba(216,188,130,0) 70%);opacity:.18;}
+  header a{color:var(--sand2);font-size:12.5px;text-decoration:none;display:inline-block;margin-bottom:8px;}
+  header h1{margin:0;font-size:23px;letter-spacing:.02em;}
+  header span{display:block;margin-top:6px;color:#dce6d7;font-size:13px;}
+  main{max-width:1120px;margin:0 auto;padding:28px 20px 64px;}
+  .proj-section{background:rgba(255,255,255,.94);border:1px solid var(--sand);border-radius:12px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+  .proj-section h3{margin:0 0 12px;color:var(--pine);font-size:14px;font-weight:700;}
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:0 4px 14px rgba(20,34,28,.05);}
+  .card h2{font-size:15px;margin:0 0 18px;color:var(--pine);font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--sand);padding-bottom:10px;}
+  .row2,.row3{display:grid;gap:10px;}
+  .row2{grid-template-columns:1fr 1fr;}
+  .row3{grid-template-columns:1fr 1fr 1fr;}
+  label{display:block;font-size:12px;color:#5d6a63;margin:10px 0 4px;font-weight:600;}
+  input,select{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;font-size:13.5px;background:#fbfaf6;color:var(--ink);}
+  input:focus,select:focus{outline:none;border-color:var(--moss);box-shadow:0 0 0 3px rgba(108,138,69,.12);}
+  .sec{font-size:12px;font-weight:800;color:var(--pine);margin:16px 0 6px;border-left:4px solid var(--moss);padding-left:9px;letter-spacing:.04em;text-transform:uppercase;}
+  .subtle{font-size:11.5px;color:#6d756f;line-height:1.7;background:#f5f3ec;border-radius:8px;padding:10px 12px;margin-top:12px;}
+  .hint{font-size:11px;color:#8a8f85;margin-top:4px;}
+  .calc-btn,.pro-btn{margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;font-size:14.5px;font-weight:800;cursor:pointer;transition:transform .15s ease,filter .15s ease;}
+  .calc-btn{background:linear-gradient(135deg,var(--pine),var(--pine2));color:#fff;}
+  .pro-btn{background:linear-gradient(135deg,var(--sand),var(--sand2));color:#3a2b11;}
+  .calc-btn:hover,.pro-btn:hover{filter:brightness(1.03);transform:translateY(-1px);}
+  table{width:100%;border-collapse:collapse;margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th{background:var(--pine);color:#f5f3ee;font-weight:700;font-size:12px;padding:10px;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  td{padding:10px;font-size:13px;border-bottom:1px solid var(--line);}
+  tr:nth-child(even) td{background:#f8f6ef;}
+  td:last-child{text-align:right;font-weight:700;}
+  .ok{color:var(--ok);font-weight:800;}
+  .ng{color:var(--ng);font-weight:800;}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.02em;}
+  .pill.ok{background:rgba(29,123,60,.1);}
+  .pill.ng{background:rgba(178,59,45,.1);}
+  details.proc{margin-top:16px;border:1px solid var(--line);border-radius:10px;background:#faf8f2;overflow:hidden;}
+  details.proc summary{cursor:pointer;padding:11px 14px;font-weight:800;font-size:13px;color:var(--pine);user-select:none;list-style:none;display:flex;align-items:center;gap:7px;}
+  details.proc summary::before{content:"▶";font-size:10px;transition:transform .2s;}
+  details[open].proc summary::before{transform:rotate(90deg);}
+  details.proc pre{margin:0;padding:12px 16px 16px;font-family:"Courier New",monospace;font-size:11.5px;line-height:1.85;white-space:pre-wrap;color:#2c3e35;border-top:1px solid var(--line);}
+  .mob-tabs{display:none;}
+  .hidden{display:none!important;}
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:700px){
+    .proj-grid,.row2,.row3{grid-template-columns:1fr;}
+  }
+  @media screen and (max-width:767px){
+    .mob-tabs{display:flex;background:transparent;border-bottom:2px solid var(--line);margin:0 0 14px;}
+    .mob-tab{flex:1;padding:11px 4px;text-align:center;font-size:13.5px;font-weight:800;color:#7c817b;cursor:pointer;background:transparent;border:none;border-bottom:3px solid transparent;}
+    .mob-tab.active{color:var(--pine);border-bottom-color:var(--sand);}
+    .grid{display:block;}
+    .grid>.card{display:none;}
+    .grid>.card.mob-active{display:block;}
+  }
+  @media print{
+    header,.no-print{display:none!important;}
+    body{background:#fff;margin:0;font-size:9pt;line-height:1.5;color:#111;}
+    main{padding:0;max-width:100%!important;}
+    .grid{grid-template-columns:1fr!important;gap:10pt!important;}
+    .card,.proj-section{box-shadow:none!important;background:#fff!important;border:1px solid #bbb!important;border-radius:4pt!important;}
+    .card{padding:10pt 12pt!important;break-inside:avoid;}
+    .card h2{font-size:10.5pt!important;padding-bottom:6pt!important;margin-bottom:9pt!important;}
+    label{font-size:8pt!important;margin:6pt 0 2pt!important;}
+    .sec{font-size:8pt!important;margin:10pt 0 4pt!important;}
+    .subtle,.hint{font-size:7.5pt!important;padding:6pt 9pt!important;}
+    table{border:1px solid #bbb!important;border-radius:0!important;margin-top:6pt!important;}
+    th{font-size:8pt!important;padding:5pt 7pt!important;background:#17352d!important;color:#fff!important;}
+    td{font-size:8.5pt!important;padding:5pt 7pt!important;}
+    tr:nth-child(even) td{background:#f5f5f5!important;}
+    details.proc{display:block!important;margin-top:10pt!important;border:1pt solid #17352d!important;border-radius:4pt!important;break-inside:avoid;background:#fafafa!important;}
+    details.proc>summary{display:none!important;}
+    details.proc::before{content:"📋  計算過程（供第三方檢核）";display:block;font-weight:700;font-size:8pt;color:#17352d;padding:6pt 10pt 4pt;border-bottom:1px solid #ccc;letter-spacing:.04em;}
+    details.proc>pre{font-size:7pt!important;line-height:1.65!important;white-space:pre-wrap!important;padding:6pt 10pt 10pt!important;color:#1a1a1a!important;font-family:"Courier New",monospace!important;}
+    @page{margin:15mm 12mm;size:A4;}
+  }
+</style>
+</head>
+<body data-tool="hdc">
+<header>
+  <a href="https://yj-chen0830.github.io/engineering-hub/">← 返回工程計算中心</a>
+  <h1>⛰️ 山坡地排水溝設計</h1>
+  <span>合理化公式設計流量 + 曼寧公式通水能力 + 容許流速沖淤檢核</span>
+</header>
+<main>
+
+<div class="proj-section no-print" id="projSection">
+  <h3>📁 專案資訊（列印時帶入計算書封面）</h3>
+  <div class="proj-grid">
+    <div><label>工程名稱</label><input id="pj-name" placeholder="○○山坡地開發工程"></div>
+    <div><label>工程地點</label><input id="pj-loc" placeholder="○○市○○區"></div>
+    <div><label>承造廠商</label><input id="pj-contractor" placeholder="○○營造股份有限公司"></div>
+    <div><label>文件編號</label><input id="pj-docno" placeholder="HDC-CAL-001"></div>
+    <div><label>計算者</label><input id="pj-calc" placeholder="姓名"></div>
+    <div><label>審核者</label><input id="pj-review" placeholder="姓名"></div>
+    <div><label>計算日期</label><input id="pj-date" type="date"></div>
+  </div>
+</div>
+
+<div class="mob-tabs">
+  <button class="mob-tab active" onclick="switchMobTab('hdc-in',this)">📋 輸入參數</button>
+  <button class="mob-tab" id="mobTab-hdc-r" onclick="switchMobTab('hdc-r',this)">📊 計算結果</button>
+</div>
+
+<div class="grid">
+  <div class="card mob-active" data-tab="hdc-in">
+    <h2>🌧️ 集水與渠道參數</h2>
+
+    <div class="sec">集水條件</div>
+    <div class="row3">
+      <div><label>集水面積 A (ha)</label><input id="hdc-A" type="number" value="3" step="0.1" min="0.01"></div>
+      <div><label>逕流係數 C</label><input id="hdc-C" type="number" value="0.5" step="0.05" min="0.05" max="1"></div>
+      <div>
+        <label>雨強模式</label>
+        <select id="hdc-rain-mode" onchange="toggleRainMode()">
+          <option value="direct">直接輸入 I</option>
+          <option value="idf">簡化 IDF</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="hdc-rain-direct">
+      <label>降雨強度 I (mm/hr)</label>
+      <input id="hdc-I" type="number" value="90" step="1" min="1">
+    </div>
+
+    <div id="hdc-rain-idf" class="hidden">
+      <div class="row2">
+        <div><label>IDF 係數 a</label><input id="hdc-idf-a" type="number" value="900" step="1" min="0"></div>
+        <div><label>IDF 係數 b</label><input id="hdc-idf-b" type="number" value="10" step="0.1" min="0"></div>
+      </div>
+      <div class="row2">
+        <div><label>IDF 指數 c</label><input id="hdc-idf-c" type="number" value="0.7" step="0.01" min="0.01"></div>
+        <div><label>集流時間 t (min)</label><input id="hdc-idf-t" type="number" value="15" step="1" min="1"></div>
+      </div>
+      <div class="hint">雨強公式：I = a / (t + b)<sup>c</sup></div>
+    </div>
+
+    <div class="sec">渠道斷面</div>
+    <div class="row2">
+      <div>
+        <label>斷面型式</label>
+        <select id="hdc-shape" onchange="toggleShape()">
+          <option value="trapezoid">梯形渠</option>
+          <option value="rect">矩形渠</option>
+        </select>
+      </div>
+      <div>
+        <label>水深模式</label>
+        <select id="hdc-depth-mode" onchange="toggleDepthMode()">
+          <option value="check">檢核已知水深</option>
+          <option value="solve">反算所需水深</option>
+        </select>
+      </div>
+    </div>
+    <div class="row3">
+      <div><label>底寬 b (m)</label><input id="hdc-b" type="number" value="0.6" step="0.05" min="0.05"></div>
+      <div id="hdc-m-wrap"><label>邊坡比 m (H:V)</label><input id="hdc-m" type="number" value="1" step="0.1" min="0"></div>
+      <div id="hdc-h-wrap"><label>水深 h (m)</label><input id="hdc-h" type="number" value="0.5" step="0.01" min="0.01"></div>
+    </div>
+    <div class="hint" id="hdc-depth-hint">反算模式會求滿足通水能力之最小水深，再做流速檢核。</div>
+
+    <div class="sec">材質與坡度</div>
+    <div class="row3">
+      <div>
+        <label>襯砌材質</label>
+        <select id="hdc-material" onchange="syncMaterialDefaults()">
+          <option value="concrete">混凝土</option>
+          <option value="masonry">砌石</option>
+          <option value="earth">土渠</option>
+        </select>
+      </div>
+      <div><label>曼寧糙度 n</label><input id="hdc-n" type="number" value="0.014" step="0.001" min="0.005"></div>
+      <div><label>渠道坡度 S (‰)</label><input id="hdc-Spermil" type="number" value="5" step="0.1" min="0.1"></div>
+    </div>
+
+    <button class="calc-btn" onclick="calcHDC()">計算排水溝通水能力</button>
+    <div class="subtle">預設範例：A=3 ha、C=0.5、I=90 mm/hr、梯形渠 b=0.6 m、m=1、h=0.5 m、混凝土 n=0.014、S=5‰。本工具適用山坡地開發、水土保持或場區明溝之初步水理檢核；正式送審設計仍應配合基地排水分區、重現期、入流歷線、自由板高及構造配筋整體檢討。</div>
+  </div>
+
+  <div class="card" data-tab="hdc-r">
+    <h2>📊 計算結果</h2>
+    <div id="hdc-result"><p style="color:#7b847d">尚未計算</p></div>
+    <details class="proc" id="hdc-proc" style="display:none">
+      <summary>📋 計算過程（供第三方檢核）</summary>
+      <pre id="hdc-proc-text"></pre>
+    </details>
+    <button class="pro-btn no-print" onclick="openPro()">📄 產出計算書 PDF</button>
+  </div>
+</div>
+
+</main>
+<script>
+function switchMobTab(name,btn){
+  btn.parentElement.querySelectorAll('.mob-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  btn.parentElement.nextElementSibling.querySelectorAll('.card').forEach(function(c){
+    c.classList.toggle('mob-active',c.dataset.tab===name);
+  });
+}
+function openPro(){JRH.checkEmail(function(){jrhPrint('山坡地排水溝設計計算書');});}
+function v(id){return parseFloat(document.getElementById(id).value)||0;}
+function text(id){return document.getElementById(id).value;}
+function f2(x){return Number(x).toFixed(2);}
+function f3(x){return Number(x).toFixed(3);}
+function f4(x){return Number(x).toFixed(4);}
+function syncMaterialDefaults(){
+  var material = text('hdc-material');
+  var n = document.getElementById('hdc-n');
+  var mapping = {
+    concrete:0.014,
+    masonry:0.025,
+    earth:0.030
+  };
+  n.value = mapping[material];
+}
+function toggleRainMode(){
+  var mode = text('hdc-rain-mode');
+  document.getElementById('hdc-rain-direct').classList.toggle('hidden',mode!=='direct');
+  document.getElementById('hdc-rain-idf').classList.toggle('hidden',mode!=='idf');
+}
+function toggleShape(){
+  var isRect = text('hdc-shape')==='rect';
+  document.getElementById('hdc-m-wrap').classList.toggle('hidden',isRect);
+}
+function toggleDepthMode(){
+  var solve = text('hdc-depth-mode')==='solve';
+  document.getElementById('hdc-h-wrap').classList.toggle('hidden',solve);
+  document.getElementById('hdc-depth-hint').textContent = solve ? '反算模式會求滿足通水能力之最小水深，再做流速檢核。' : '檢核模式以輸入水深直接計算通水能力與流速。';
+}
+function getVelocityRange(material){
+  if(material==='earth') return {min:0.3,max:0.9,label:'土渠'};
+  if(material==='masonry') return {min:0.6,max:2.5,label:'砌石'};
+  return {min:0.6,max:4.5,label:'混凝土'};
+}
+function sectionProps(shape,b,m,h){
+  var Ac,P;
+  if(shape==='rect'){
+    Ac = b*h;
+    P = b + 2*h;
+  }else{
+    Ac = h*(b + m*h);
+    P = b + 2*h*Math.sqrt(1 + m*m);
+  }
+  var R = Ac/P;
+  return {Ac:Ac,P:P,R:R};
+}
+function capacity(shape,b,m,h,n,S){
+  var sp = sectionProps(shape,b,m,h);
+  var Qc = (1/n)*sp.Ac*Math.pow(sp.R,2/3)*Math.sqrt(S);
+  var vel = Qc/sp.Ac;
+  return {Ac:sp.Ac,P:sp.P,R:sp.R,Qc:Qc,v:vel};
+}
+function solveDepth(shape,b,m,n,S,Qreq){
+  var low = 0.001, high = 0.05;
+  var guard = 0;
+  while(capacity(shape,b,m,high,n,S).Qc < Qreq && high < 20){
+    high *= 1.5;
+    guard += 1;
+    if(guard>200) break;
+  }
+  if(capacity(shape,b,m,high,n,S).Qc < Qreq){
+    return null;
+  }
+  for(var i=0;i<80;i++){
+    var mid = (low+high)/2;
+    if(capacity(shape,b,m,mid,n,S).Qc >= Qreq){
+      high = mid;
+    }else{
+      low = mid;
+    }
+  }
+  return high;
+}
+function calcHDC(){
+  var A = v('hdc-A');
+  var C = v('hdc-C');
+  var rainMode = text('hdc-rain-mode');
+  var I = v('hdc-I');
+  var a = v('hdc-idf-a');
+  var bIdf = v('hdc-idf-b');
+  var cIdf = v('hdc-idf-c');
+  var t = v('hdc-idf-t');
+  if(rainMode==='idf'){
+    I = a/Math.pow(t+bIdf,cIdf);
+  }
+  var Qdesign = C*I*A/360;
+
+  var shape = text('hdc-shape');
+  var depthMode = text('hdc-depth-mode');
+  var b = v('hdc-b');
+  var m = shape==='rect' ? 0 : v('hdc-m');
+  var hInput = v('hdc-h');
+  var n = v('hdc-n');
+  var Spermil = v('hdc-Spermil');
+  var S = Spermil/1000;
+  var material = text('hdc-material');
+  var vr = getVelocityRange(material);
+
+  if(A<=0 || C<=0 || I<=0 || b<=0 || n<=0 || S<=0){
+    alert('請確認集水、雨強、斷面、糙度與坡度皆為正值。');
+    return;
+  }
+  if(shape!=='rect' && m<0){
+    alert('邊坡比 m 不可小於 0。');
+    return;
+  }
+
+  var h = hInput;
+  var solved = false;
+  if(depthMode==='solve'){
+    h = solveDepth(shape,b,m,n,S,Qdesign);
+    if(h===null){
+      alert('在目前參數下無法於合理搜尋範圍內求得滿足通水能力之水深。');
+      return;
+    }
+    solved = true;
+  }
+  if(h<=0){
+    alert('水深 h 需大於 0。');
+    return;
+  }
+
+  var out = capacity(shape,b,m,h,n,S);
+  var capOK = out.Qc >= Qdesign;
+  var velOK = out.v >= vr.min && out.v <= vr.max;
+  var allOK = capOK && velOK;
+  var shapeLabel = shape==='rect' ? '矩形渠' : '梯形渠';
+  var verdict = allOK ? 'OK' : 'NG';
+
+  var resultHtml = ''
+    + '<table>'
+    + '<tr><th>項目</th><th>數值</th></tr>'
+    + '<tr><td>設計流量 Q_design</td><td>'+f3(Qdesign)+' m³/s</td></tr>'
+    + '<tr><td>採用斷面 / 材質</td><td>'+shapeLabel+' / '+vr.label+'</td></tr>'
+    + '<tr><td>計算水深 h</td><td>'+f3(h)+' m'+(solved?'（反算）':'')+'</td></tr>'
+    + '<tr><td>過水斷面 A<sub>c</sub></td><td>'+f3(out.Ac)+' m²</td></tr>'
+    + '<tr><td>潤周 P</td><td>'+f3(out.P)+' m</td></tr>'
+    + '<tr><td>水力半徑 R</td><td>'+f3(out.R)+' m</td></tr>'
+    + '<tr><td>通水能力 Q<sub>c</sub></td><td>'+f3(out.Qc)+' m³/s '+(capOK?'<span class="ok">OK</span>':'<span class="ng">NG</span>')+'</td></tr>'
+    + '<tr><td>平均流速 v</td><td>'+f3(out.v)+' m/s '+(velOK?'<span class="ok">OK</span>':'<span class="ng">NG</span>')+'</td></tr>'
+    + '<tr><td>容許流速範圍</td><td>'+f2(vr.min)+' ~ '+f2(vr.max)+' m/s</td></tr>'
+    + '<tr><td>綜合判定</td><td><span class="pill '+(allOK?'ok':'ng')+'">'+verdict+'</span> '+(allOK?'通水能力與沖淤檢核均通過':'至少一項檢核未通過')+'</td></tr>'
+    + '</table>';
+  document.getElementById('hdc-result').innerHTML = resultHtml;
+
+  var p = '';
+  p += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  p += '  山坡地排水溝設計計算過程\n';
+  p += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+  p += '【一】輸入條件\n';
+  p += '  集水面積 A = '+A+' ha\n';
+  p += '  逕流係數 C = '+C+'\n';
+  if(rainMode==='direct'){
+    p += '  降雨強度 I = '+I+' mm/hr（直接輸入）\n';
+  }else{
+    p += '  降雨強度 I = a/(t+b)^c = '+a+'/('+t+'+'+bIdf+')^'+cIdf+' = '+f3(I)+' mm/hr\n';
+  }
+  p += '  渠道型式 = '+shapeLabel+'\n';
+  p += '  底寬 b = '+b+' m\n';
+  if(shape==='trapezoid') p += '  邊坡比 m = '+m+' (H:V)\n';
+  p += '  糙度 n = '+n+'\n';
+  p += '  渠道坡度 S = '+Spermil+' ‰ = '+f4(S)+'\n';
+  p += '  材質 = '+vr.label+'；容許流速範圍 = '+f2(vr.min)+' ~ '+f2(vr.max)+' m/s\n';
+  p += solved ? '  水深 h = '+f3(h)+' m（由通水能力反算）\n\n' : '  水深 h = '+h+' m（輸入檢核）\n\n';
+
+  p += '【二】合理化公式求設計流量\n';
+  p += '  Q_design = C × I × A / 360\n';
+  p += '           = '+C+' × '+f3(I)+' × '+A+' / 360\n';
+  p += '           = '+f3(Qdesign)+' m³/s\n\n';
+
+  p += '【三】渠道斷面幾何\n';
+  if(shape==='rect'){
+    p += '  A_c = b × h = '+b+' × '+f3(h)+' = '+f3(out.Ac)+' m²\n';
+    p += '  P   = b + 2h = '+b+' + 2×'+f3(h)+' = '+f3(out.P)+' m\n';
+  }else{
+    p += '  A_c = h × (b + m h)\n';
+    p += '      = '+f3(h)+' × ('+b+' + '+m+'×'+f3(h)+')\n';
+    p += '      = '+f3(out.Ac)+' m²\n';
+    p += '  P   = b + 2h × √(1+m²)\n';
+    p += '      = '+b+' + 2×'+f3(h)+'×√(1+'+m+'²)\n';
+    p += '      = '+f3(out.P)+' m\n';
+  }
+  p += '  R   = A_c / P = '+f3(out.Ac)+' / '+f3(out.P)+' = '+f3(out.R)+' m\n\n';
+
+  p += '【四】Manning 公式求渠道通水能力\n';
+  p += '  Q_c = (1/n) × A_c × R^(2/3) × S^(1/2)\n';
+  p += '      = (1/'+n+') × '+f3(out.Ac)+' × '+f3(out.R)+'^(2/3) × '+f4(S)+'^(1/2)\n';
+  p += '      = '+f3(out.Qc)+' m³/s\n';
+  if(solved){
+    p += '  反算條件：令 Q_c ≥ Q_design，二分搜尋求最小 h，得 h = '+f3(h)+' m\n';
+  }
+  p += '\n【五】流速與沖淤檢核\n';
+  p += '  v = Q_c / A_c = '+f3(out.Qc)+' / '+f3(out.Ac)+' = '+f3(out.v)+' m/s\n';
+  p += '  容許流速範圍（'+vr.label+'）= '+f2(vr.min)+' ~ '+f2(vr.max)+' m/s\n';
+  p += '  通水能力檢核：Q_c '+(capOK?'>=':'<')+' Q_design → '+(capOK?'OK':'NG')+'\n';
+  p += '  流速檢核：'+(velOK?'位於':'不在')+'容許範圍內 → '+(velOK?'OK':'NG')+'\n';
+  p += '  綜合判定：'+verdict+'（兩項皆通過方為 OK）\n\n';
+
+  p += '【六】設計提醒\n';
+  p += '  1. 本工具未另計自由板高，實際溝深應再加計施工及安全餘度。\n';
+  p += '  2. 雨強、集流時間與逕流係數應依基地分區、重現期及主管機關審查要求選定。\n';
+  p += '  3. 正式設計應再檢討轉彎、跌水、入流口、出流消能及襯砌結構細部。\n';
+  p += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+
+  document.getElementById('hdc-proc-text').textContent = p;
+  document.getElementById('hdc-proc').style.display = '';
+  if(window.innerWidth<768){
+    var btn = document.getElementById('mobTab-hdc-r');
+    if(btn) switchMobTab('hdc-r',btn);
+  }
+}
+toggleRainMode();
+toggleShape();
+toggleDepthMode();
+</script>
+<script>
+window.jrhDocMeta = {
+  doc:'山坡地排水溝設計計算書',
+  codes:[
+    '合理化公式 Q = C × I × A / 360（公制）',
+    'Manning 公式 Q = (1/n) × A × R^(2/3) × S^(1/2)',
+    '山坡地保育利用條例及水土保持計畫常用排水設計原則'
+  ],
+  notes:[
+    '本工具適用山坡地開發排水明溝之初步水理檢核，輸入參數應由設計者依基地開發強度、地表覆蓋與主管機關要求自行判定。',
+    '合理化公式適用於較小集水區之尖峰流量估算；如集水區大、滯洪顯著或需事件歷線分析，應改採更完整之水文方法。',
+    '流速容許範圍為常用工程經驗值，用於避免明顯沖刷或淤積；仍應結合現地土質、襯砌細部及消能工整體判斷。',
+    '本工具未含自由板高、跌水構造、轉彎局部損失、入出流控制及襯砌結構強度設計，正式送審前應另行檢討。',
+    '計算成果僅供規劃與初步設計參考，正式文件應由具資格之專業技師複核後使用。'
+  ]
+};
+</script>
+</body>
+</html>
